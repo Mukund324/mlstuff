@@ -1,0 +1,67 @@
+# Dataset 
+Datas =[115.3,195.5,120.5,110.2,90.4,105.6,110.9,116.3,122.3,125.4,90.4]
+/
+
+# Mean
+
+def mean(dataset):
+    return sum(dataset)/len(dataset)
+print (mean(Datas))
+
+/
+#Median 
+
+def median(dataset):
+    data = sorted(dataset)
+    index = len(data) // 2
+    
+    if len(dataset) % 2 != 0:
+        return data[index]
+    
+    return (data[index - 1] + data[index]) / 2
+print (median(Datas))
+/
+# Mode 
+def mode(dataset):
+    frequency = {}
+
+    for value in dataset:
+        frequency[value] = frequency.get(value, 0) + 1
+
+    most_fre = max(frequency.values())
+
+    modes = [key for key, value in frequency.items()
+                      if value == most_fre]
+    return modes
+print (mode(Datas))
+/
+# Standard Deviation
+
+def Std_dev(list):
+    n = len(list)
+    mean = sum(list) / n
+    var = sum((x - mean)**2 for x in list) / n
+    std_dev = var ** 0.5
+    return std_dev,var
+
+print (Std_dev(Datas)[0])
+print (Std_dev(Datas)[1])
+/
+mini = Datas[0]
+maxi = Datas[-1]
+print (maxi)
+print (mini)
+/
+norm=[]
+for value in Datas:
+    norm.append((value-mini)/(maxi-mini))
+norm
+/
+sand=[]
+for values in Datas:
+    sand.append((values-mean(Datas))/Std_dev(Datas)[0])
+sand
+/
+
+
+
