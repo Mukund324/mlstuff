@@ -1,0 +1,69 @@
+import pandas as pd
+from matplotlib import pyplot as plt
+import numpy as np
+from scipy.special import expit
+from numpy.linalg import eig
+
+/
+df = pd.read_csv("Iris.csv")
+/
+df.head()
+/
+x = df.iloc[:,1]
+/
+y = df.iloc[:,2]
+/
+x_mean = 0;
+y_mean = 0;
+n = len(x)
+for i in range(n):
+    x_mean += x[i]
+    y_mean += y[i]
+x_mean = x_mean / n
+y_mean = y_mean / n
+/
+cov_xy = 0;
+cov_xx = 0;
+cov_yy = 0;
+
+for i in range(n):
+    cov_xy += ( (x[i] - x_mean) * (y[i] - y_mean) )
+    cov_xx += ( (x[i] - x_mean) * (x[i] - x_mean) )
+    cov_yy += ( (y[i] - y_mean) * (y[i] - y_mean) )
+cov_xy = cov_xy / ( n - 1 )
+cov_xx = cov_xx / ( n - 1 )
+cov_yy = cov_yy / ( n - 1 )
+/
+C = [ [cov_xx, cov_xy], [cov_xy, cov_yy] ]
+/
+values, vectors = eig(C)
+/
+max_val = values[0]
+max_i = 0
+for i in range(len(values)):
+    if max_val < values[i]:
+        max_i = i
+        max_val = values[i]
+eig_value = values[max_i]
+eig_vector = vectors[:,max_i]
+V = eig_vector
+/
+Y = []
+for i in range(n):
+    Y.append(( x[i] * V[0] ) + ( y[i] * V[1] ) )
+red = pd.DataFrame(Y)
+red
+/
+X = df.iloc[:,1:5]
+X
+Y = df.iloc[:,5]
+Y
+/
+from sklearn.decomposition import PCA
+pca = PCA(n_components = 2)
+
+principalComponents = pca.fit_transform(X)
+principalDF = pd.DataFrame(data = principalComponents, columns = ['PCA1', 'PCA2'])
+finalDF = pd.concat([principalDF, df[['Species']]], axis = 1)
+finalDF
+/
